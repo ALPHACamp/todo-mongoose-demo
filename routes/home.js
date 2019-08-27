@@ -2,8 +2,9 @@ const express = require('express')
 const router = express.Router()
 const Todo = require('../models/todo')
 
-// 設定首頁路由器
-router.get('/', (req, res) => {
+const { authenticated } = require('../config/auth')
+
+router.get('/', authenticated, (req, res) => {
   Todo.find({})
     .sort({ name: 'asc' })
     .exec((err, todos) => {
@@ -11,5 +12,4 @@ router.get('/', (req, res) => {
       return res.render('index', { todos: todos })
     })
 })
-
 module.exports = router
