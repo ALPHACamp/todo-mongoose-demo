@@ -16,10 +16,12 @@ router.get('/new', authenticated, (req, res) => {
 
 // 顯示一筆 Todo 的詳細內容
 router.get('/:id', authenticated, (req, res) => {
-  Todo.findOne({ _id: req.params.id, userId: req.user._id }, (err, todo) => {
-    if (err) return console.error(err)
-    return res.render('detail', { todo: todo })
-  })
+  Todo.findOne({ _id: req.params.id, userId: req.user._id })
+    .lean()
+    .exec((err, todo) => {
+      if (err) return console.error(err)
+      return res.render('detail', { todo: todo })
+    })
 })
 
 // 新增一筆  Todo
@@ -37,10 +39,12 @@ router.post('/', authenticated, (req, res) => {
 
 // 修改 Todo 頁面
 router.get('/:id/edit', authenticated, (req, res) => {
-  Todo.findOne({ _id: req.params.id, userId: req.user._id }, (err, todo) => {
-    if (err) return console.error(err)
-    return res.render('edit', { todo: todo })
-  })
+  Todo.findOne({ _id: req.params.id, userId: req.user._id })
+    .lean()
+    .exec((err, todo) => {
+      if (err) return console.error(err)
+      return res.render('edit', { todo: todo })
+    })
 })
 
 // 修改 Todo
