@@ -5,11 +5,21 @@ const mongoose = require('mongoose') // 載入 mongoose
 // 引用 express-handlebars
 const exphbs = require('express-handlebars')
 
+// 引用 body-parser
+const bodyParser = require('body-parser')
+
+// 引用 method-override
+const methodOverride = require('method-override')
+
+// 設定 bodyParser
+app.use(bodyParser.urlencoded({ extended: true }))
+
 // 告訴 express 使用 handlebars 當作 template engine 並預設 layout 是 main
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
-const bodyParser = require('body-parser')
-app.use(bodyParser.urlencoded({ extended: true }))
+
+// 設定 method-override
+app.use(methodOverride('_method'))
 
 // 資料庫連線
 mongoose.connect('mongodb://localhost/todo', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -81,7 +91,7 @@ app.get('/todos/:id/edit', (req, res) => {
     })
 })
 // 修改 Todo
-app.post('/todos/:id/edit', (req, res) => {
+app.put('/todos/:id', (req, res) => {
   Todo.findById(req.params.id, (err, todo) => {
     if (err) return console.error(err)
     todo.name = req.body.name
@@ -97,7 +107,7 @@ app.post('/todos/:id/edit', (req, res) => {
   })
 })
 // 刪除 Todo
-app.post('/todos/:id/delete', (req, res) => {
+app.delete('/todos/:id/delete', (req, res) => {
   Todo.findById(req.params.id, (err, todo) => {
     if (err) return console.error(err)
     todo.remove(err => {
