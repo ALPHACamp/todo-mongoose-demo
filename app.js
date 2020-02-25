@@ -5,6 +5,7 @@ const mongoose = require('mongoose') // 載入 mongoose
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
+const session = require('express-session')
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
@@ -23,6 +24,11 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
+app.use(session({
+  secret: 'your secret key',
+  resave: false,
+  saveUninitialized: true
+}))
 
 app.use('/', require('./routes/home'))
 app.use('/todos', require('./routes/todo'))
