@@ -2,8 +2,10 @@ const express = require('express')
 const router = express.Router()
 const Todo = require('../models/todo')
 
+const { authenticated } = require('../config/auth')
+
 // Todo 首頁
-router.get('/', (req, res) => {
+router.get('/', authenticated, (req, res) => {
   Todo.find()
     .sort({ name: 'asc' })
     .lean()
