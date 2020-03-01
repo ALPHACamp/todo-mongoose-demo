@@ -1,5 +1,9 @@
 const express = require('express')
 const app = express()
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 const mongoose = require('mongoose') // 載入 mongoose
 
 const exphbs = require('express-handlebars')
@@ -44,6 +48,7 @@ app.use((req, res, next) => {
 app.use('/', require('./routes/home'))
 app.use('/todos', require('./routes/todo'))
 app.use('/users', require('./routes/user'))
+app.use('/auth', require('./routes/auths'))
 
 app.listen(3000, () => {
   console.log('App is running!')
